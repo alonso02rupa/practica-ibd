@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -9,42 +10,48 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
 
-  sensor_temperature:
-    image: myusername/sensor-consumer:latest
+  api-gateway:
+    image: alonso02rupa/api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
     environment:
       - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
-      - SENSOR_TYPE=temperature
     depends_on:
       - rabbitmq
+
+  sensor_temperature:
+    image: alonso02rupa/sensor-infrastructure:latest
+    environment:
+      - SENSOR_TYPE=temperature
+      - TIME_SLEEP=30
+      - API_GATEWAY_URL=http://api-gateway:8080/api/sensor-data
+    depends_on:
+      - api-gateway
 
   sensor_occupancy:
-    image: myusername/sensor-consumer:latest
+    image: alonso02rupa/sensor-infrastructure:latest
     environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
       - SENSOR_TYPE=occupancy
+      - TIME_SLEEP=60
+      - API_GATEWAY_URL=http://api-gateway:8080/api/sensor-data
     depends_on:
-      - rabbitmq
+      - api-gateway
 
   sensor_power:
-    image: myusername/sensor-consumer:latest
+    image: alonso02rupa/sensor-infrastructure:latest
     environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
       - SENSOR_TYPE=power
+      - TIME_SLEEP=5
+      - API_GATEWAY_URL=http://api-gateway:8080/api/sensor-data
     depends_on:
-      - rabbitmq
+      - api-gateway
 
   sensor_camera:
-    image: myusername/sensor-consumer:latest
+    image: alonso02rupa/sensor-infrastructure:latest
     environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
       - SENSOR_TYPE=camera
+      - TIME_SLEEP=120
+      - API_GATEWAY_URL=http://api-gateway:8080/api/sensor-data
     depends_on:
-      - rabbitmq
+      - api-gateway
