@@ -44,82 +44,6 @@ services:
     networks:
       - sensor_network
 
-  sensor_temperature:
-    image: alonso02rupa/sensor-infrastructure:latest
-    environment:
-      SENSOR_TYPE: temperature
-      TIME_SLEEP: 30
-      API_GATEWAY_URL: "http://api-gateway:8080"
-      EXCHANGE_FOLDER: "exchange"
-      SENSOR_CONFIG: '{"temperature": {"type": "float", "range": [18, 30]}, "humidity": {"type": "float", "range": [30, 80]}, "air_quality_index": {"type": "categorical", "values": ["low", "medium", "high"]}}'
-    depends_on:
-      api-gateway:
-        condition: service_started
-    deploy:
-      resources:
-        limits:
-          cpus: "0.2"
-          memory: 128M
-    networks:
-      - sensor_network
-
-  sensor_occupancy:
-    image: alonso02rupa/sensor-infrastructure:latest
-    environment:
-      SENSOR_TYPE: occupancy
-      TIME_SLEEP: 60
-      API_GATEWAY_URL: "http://api-gateway:8080"
-      EXCHANGE_FOLDER: "exchange"
-      SENSOR_CONFIG: '{"occupancy": {"type": "int", "range": [0, 50]}, "movement": {"type": "categorical", "values": ["false", "true"]}, "location": {"type": "categorical", "values": ["zone1", "zone2", "zone3"]}, "dwell_time": {"type": "int", "range": [0, 60]}}'
-    depends_on:
-      api-gateway:
-        condition: service_started
-    deploy:
-      resources:
-        limits:
-          cpus: "0.2"
-          memory: 128M
-    networks:
-      - sensor_network
-
-  sensor_power:
-    image: alonso02rupa/sensor-infrastructure:latest
-    environment:
-      SENSOR_TYPE: power_consumption
-      TIME_SLEEP: 5
-      API_GATEWAY_URL: "http://api-gateway:8080"
-      EXCHANGE_FOLDER: "exchange"
-      SENSOR_CONFIG: '{"power_consumption": {"type": "float", "range": [0, 10]}, "voltage": {"type": "float", "range": [220, 240]}, "current": {"type": "float", "range": [0, 20]}, "power_factor": {"type": "float", "range": [0, 1]}}'
-    depends_on:
-      api-gateway:
-        condition: service_started
-    deploy:
-      resources:
-        limits:
-          cpus: "0.2"
-          memory: 128M
-    networks:
-      - sensor_network
-
-  sensor_camera:
-    image: alonso02rupa/sensor-infrastructure:latest
-    environment:
-      SENSOR_TYPE: status
-      TIME_SLEEP: 120
-      API_GATEWAY_URL: "http://api-gateway:8080"
-      EXCHANGE_FOLDER: "exchange"
-      SENSOR_CONFIG: '{"status": {"type": "categorical", "values": ["active", "inactive"]}, "alerts": {"type": "categorical", "values": ["motion detected", "unauthorized person", "abandoned object", "none"]}, "alert_level": {"type": "categorical", "values": ["low", "medium", "high"]}}'
-    depends_on:
-      api-gateway:
-        condition: service_started
-    deploy:
-      resources:
-        limits:
-          cpus: "0.2"
-          memory: 128M
-    networks:
-      - sensor_network
-
   consumer_temperature:
     image: alonso02rupa/consumer-infrastructure:latest
     environment:
@@ -198,7 +122,7 @@ services:
 
 networks:
   sensor_network:
-    driver: bridge
+    external: true
 
 volumes:
   rabbitmq_data:
