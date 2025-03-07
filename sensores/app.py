@@ -10,10 +10,14 @@ print("[*] Iniciando sensor...", flush=True)
 time.sleep(10)
 
 # Variables de entorno
-API_GATEWAY_URL = os.getenv("API_GATEWAY_URL", "http://api-gateway:8080/api/sensor-data")
+API_GATEWAY_URL_BASE = os.getenv("API_GATEWAY_URL", "http://api-gateway:8080")  # Base URL
+EXCHANGE_FOLDER = os.getenv("EXCHANGE_FOLDER", "exchange")                      # Parte dinámica del endpoint
 sensor_type = os.getenv("SENSOR_TYPE", "generic_sensor")
 time_sleep = float(os.getenv("TIME_SLEEP", 30))
 sensor_config_str = os.getenv("SENSOR_CONFIG", "{}")
+
+# Construir la URL completa dinámicamente
+API_GATEWAY_URL = f"{API_GATEWAY_URL_BASE}/api/{EXCHANGE_FOLDER}"
 
 headers = {"Content-Type": "application/json"}
 
@@ -59,7 +63,7 @@ def generate_sensor_data():
 
 print(f"[*] Sensor '{sensor_type}' iniciado. Enviando datos cada {time_sleep} segundos a {API_GATEWAY_URL}", flush=True)
 
-time.sleep((int(time_sleep/5))*2)
+time.sleep((int(time_sleep / 5)) * 2)
 
 try:
     while True:
