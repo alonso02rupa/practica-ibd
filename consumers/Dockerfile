@@ -5,6 +5,7 @@ COPY app.py .
 RUN pip install --no-cache-dir -r requirements.txt
 ENV RABBITMQ_HOST=rabbitmq \
     EXCHANGE_FOLDER=exchange \
-    SENSOR_NAME=default_sensor
+    SENSOR_NAME=default_sensor \
+    SERVICES_FOLDER=service-data
 EXPOSE 5000
 CMD ["python", "app.py"]

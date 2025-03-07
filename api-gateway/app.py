@@ -97,7 +97,6 @@ def receive_sensor_data():
 
 @app.route(f'/api/{SERVICES_FOLDER}', methods=['GET'])
 def handle_service_request():
-    """Redirige la petición GET a un microservicio basado en el encabezado."""
     print(f"[*] Recibiendo solicitud en /api/{SERVICES_FOLDER}", flush=True)
     service_name = request.headers.get('Service-Name')
 
@@ -105,12 +104,15 @@ def handle_service_request():
         return jsonify({'error': "Encabezado 'Service-Name' requerido"}), 400
 
     try:
-        response = requests.get(f"http://{service_name}:5000/api/{service_name}")
+        # Apuntar al nombre del servicio correcto y al puerto 5000 con el endpoint /api
+        response = requests.post(f"http://{service_name}:5000/api")
         print(f"[*] Respuesta recibida de {service_name}: {response.json()}", flush=True)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         print(f"[!] Error al conectar con el servicio '{service_name}': {str(e)}", flush=True)
         return jsonify({'error': f"Error al conectar con el servicio '{service_name}': {str(e)}"}), 500
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, threaded=True)

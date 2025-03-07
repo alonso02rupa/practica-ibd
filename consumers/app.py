@@ -10,6 +10,7 @@ from flask import Flask, jsonify, request
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "rabbitmq")
 EXCHANGE_FOLDER = os.getenv("EXCHANGE_FOLDER", "exchange")
 SENSOR_NAME = os.getenv("SENSOR_NAME")
+SERVICES_FOLDER = os.getenv("SERVICES_FOLDER", "services")
 
 if not SENSOR_NAME:
     raise ValueError("Debe definir la variable de entorno SENSOR_NAME.")
@@ -21,7 +22,7 @@ os.makedirs(CSV_DIR, exist_ok=True)
 # Flask App para exponer los datos
 app = Flask(__name__)
 
-@app.route(f'/api/{SENSOR_NAME}', methods=['GET'])
+@app.route(f'/api', methods=['GET', 'POST'])  # Cambiar a esto
 def get_sensor_data():
     """Devuelve los datos del sensor almacenados en el CSV."""
     if not os.path.exists(CSV_FILE):
