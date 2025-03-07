@@ -94,7 +94,7 @@ docker network create sensor_network
 docker-compose -f docker-compose-api.yml up
 ```
 
-Asegurate de que todos los servicios se han iniciado antes de seguir con el procedimiento
+Asegurate de que todos los servicios se han iniciado antes de seguir con el procedimiento. Abre otra terminal y ejecuta el siguiente compose con los sensores (asegurate de volver a meterte a /practica-ibd):
 
 #### 🔄 Lanzar los sensores
 
@@ -106,7 +106,7 @@ docker-compose -f docker-compose-sensors.yml up --build \
   --scale sensor_occupancy=6
 ```
 
-#### 📊 Solicitar datos con GET
+#### 📊 Solicitar datos con GET (en otra terminal)
 
 ```bash
 curl -X GET "http://localhost:8080/api/services" -H "Service-Name: consumer_temperature"
