@@ -91,8 +91,10 @@ docker network create sensor_network
 #### ⚙️ Lanzar la infraestructura base
 
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose-api.yml up
 ```
+
+Asegurate de que todos los servicios se han iniciado antes de seguir con el procedimiento
 
 #### 🔄 Lanzar los sensores
 
@@ -130,6 +132,13 @@ curl -X GET "http://localhost:8080/api/services" -H "Service-Name: consumer_temp
 
 ---
 
+## 📁 Personalización
+
+- Las imagenes descargadas se generan a partir de los Dockerfiles y archivos .py de las carpetas
+- Si se desea añadir un nuevo tipo de sensor, basta con repetir uno de los servicios ya dados y prestarle el JSON que le dirá qué datos simular
+- En caso de añadir un sensor, se deberá añadir también un nuevo consumidor
+
+---
 
 🎉 **¡Gracias por visitar nuestro repositorio!** 🎉
 
