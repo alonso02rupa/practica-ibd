@@ -110,13 +110,13 @@ docker-compose -f docker-compose-sensors.yml up --build \
 curl -X GET "http://localhost:8080/api/services" -H "Service-Name: consumer_temperature"
 ```
 
-> **Nota:** La API se ejecuta en el **puerto 5000** por defecto. Asegúrate de que este puerto esté accesible en tu máquina.
+> **Nota:** Las distintas opciones de lectura de csv son: consumer_temperature, consumer_power, consumer_camera, consumer_occupancy
 
 ---
 
 ## 📚 Persistencia de Datos
 
-- Los datos de los sensores se almacenan en **archivos CSV** dentro de un volumen Docker compartido (`sensor_data_volume`).
+- Los datos de los sensores se almacenan en **archivos CSV** dentro de un volumen Docker compartido (`sensor_data`).
 - Cada tipo de sensor tiene su propio archivo CSV (`temperature.csv`, `occupancy.csv`, etc.).
 - Puedes acceder a los archivos CSV montando el volumen en tu máquina local o ejecutando comandos dentro de los contenedores de consumidores.
 
